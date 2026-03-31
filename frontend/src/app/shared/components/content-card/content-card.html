@@ -1,0 +1,30 @@
+<div 
+  class="card" 
+  (click)="onCardClick()"
+  (keydown.enter)="onCardClick()"
+  (keydown.space)="onCardClick()"
+  role="button"
+  tabindex="0"
+  [attr.aria-label]="'Ver detalles de ' + item.title"
+  [attr.aria-pressed]="false"
+>
+  <div class="card__poster" [class.card__poster--game]="item.type === 'game'">
+    @if (item.poster_url) {
+      <img [src]="item.poster_url" [alt]="'Imagen de ' + item.title" loading="lazy" />
+    } @else {
+      <div class="card__no-poster" aria-hidden="false">
+        <span aria-hidden="true">{{ item.title[0] }}</span>
+      </div>
+    }
+    <div class="card__overlay">
+      <span class="badge {{ item.type }}" [attr.aria-label]="'Tipo: ' + getTypeLabel()">{{ getTypeLabel() }}</span>
+      @if (item.rating) {
+        <span class="card__rating" [attr.aria-label]="'Calificación: ' + item.rating + ' de 10'">⭐ {{ item.rating }}</span>
+      }
+    </div>
+  </div>
+  <div class="card__info">
+    <h3 class="card__title">{{ item.title }}</h3>
+    <p class="card__year">{{ getYear() }}</p>
+  </div>
+</div>

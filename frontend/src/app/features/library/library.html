@@ -1,0 +1,90 @@
+<div class="library">
+  <div class="container">
+
+    <div class="library__header">
+      <h1 class="library__title">Mi biblioteca</h1>
+
+      <!-- Filtros de tipo -->
+      <div class="library__filters">
+        <button class="library__filter" [class.active]="activeType === 'all'" (click)="setType('all')">Todo</button>
+        <button class="library__filter" [class.active]="activeType === 'movie'" (click)="setType('movie')">🎬 Películas</button>
+        <button class="library__filter" [class.active]="activeType === 'series'" (click)="setType('series')">📺 Series</button>
+        <button class="library__filter" [class.active]="activeType === 'game'" (click)="setType('game')">🎮 Juegos</button>
+      </div>
+
+      <!-- Filtros de estado -->
+      <div class="library__filters">
+        <button class="library__filter library__filter--status" [class.active]="activeStatus === 'all'" (click)="setStatus('all')">Todos</button>
+        <button class="library__filter library__filter--status" [class.active]="activeStatus === 'completed'" (click)="setStatus('completed')">Completados</button>
+        <button class="library__filter library__filter--status" [class.active]="activeStatus === 'watching'" (click)="setStatus('watching')">En progreso</button>
+        <button class="library__filter library__filter--status" [class.active]="activeStatus === 'pending'" (click)="setStatus('pending')">Pendientes</button>
+        <button class="library__filter library__filter--status" [class.active]="activeStatus === 'abandoned'" (click)="setStatus('abandoned')">Abandonados</button>
+      </div>
+    </div>
+
+    <!-- Estadísticas -->
+    @if (stats.length > 0) {
+      <div class="library__stats">
+        <div class="stat">
+          <span class="stat__number">{{ getTotalByType('movie') }}</span>
+          <span class="stat__label">Películas</span>
+        </div>
+        <div class="stat">
+          <span class="stat__number">{{ getTotalByType('series') }}</span>
+          <span class="stat__label">Series</span>
+        </div>
+        <div class="stat">
+          <span class="stat__number">{{ getTotalByType('game') }}</span>
+          <span class="stat__label">Juegos</span>
+        </div>
+        <div class="stat">
+          <span class="stat__number">{{ getAvgScore() }}</span>
+          <span class="stat__label">Puntuación media</span>
+        </div>
+      </div>
+    }
+
+    <!-- Cargando -->
+    @if (loading) {
+      <div class="library__loading">Cargando tu biblioteca...</div>
+    }
+
+    <!-- Vacío -->
+    @if (!loading && filteredEntries.length === 0) {
+      <div class="library__empty">
+        <p>No tienes contenido en esta categoría.</p>
+        <a routerLink="/search" class="btn-primary">Buscar contenido</a>
+      </div>
+    }
+
+    <!-- Grid -->
+    @if (!loading && filteredEntries.length > 0) {
+      <div class="library__grid">
+        @for (entry of filteredEntries; track entry.id) {
+          <div class="library__item" (click)="goToDetail(entry)">
+            <div class="library__poster" [class.library__poster--game]="entry.type === 'game'">
+              @if (entry.poster_url) {
+                <img [src]="entry.poster_url" [alt]="entry.title" loading="lazy" />
+              } @else {
+                <div class="library__no-poster">{{ entry.title[0] }}</div>
+              }
+              <div class="library__item-overlay">
+                <span class="badge {{ entry.type }}">{{ getTypeLabel(entry.type) }}</span>
+                <span class="library__status-badge library__status-badge--{{ entry.status }}">
+                  {{ getStatusLabel(entry.status) }}
+                </span>
+              </div>
+            </div>
+            <div class="library__item-info">
+              <h3 class="library__item-title">{{ entry.title }}</h3>
+              @if (entry.score) {
+                <span class="library__item-score">⭐ {{ entry.score }}/10</span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+  </div>
+</div>

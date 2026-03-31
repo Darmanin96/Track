@@ -1,0 +1,60 @@
+<div class="home">
+
+  <!-- Hero -->
+  <section class="hero" aria-label="Sección heroes principal">
+    <div class="container">
+      <h1 class="hero__title">Tu tracker<br><span>películas, series y juegos</span></h1>
+      <p class="hero__subtitle">Organiza y sigue tu entretenimiento con <span class="brand">Trackr</span></p>
+      <div class="hero__actions">
+      </div>
+    </div>
+  </section>
+
+  <!-- Tendencias -->
+  <section class="trending" aria-label="Sección de tendencias">
+    <div class="container">
+
+      @if (loading) {
+        <div class="loading" aria-live="polite" aria-busy="true">
+          <span>Cargando tendencias...</span>
+        </div>
+      }
+
+      @if (!loading && trending) {
+
+        <!-- Películas -->
+        <section class="section" aria-label="Películas tendencia">
+          <h2 class="section__title">Películas tendencia</h2>
+          <div class="grid" role="region" aria-label="Grid de películas trending">
+            @for (item of trending.movies; track item.id) {
+              <app-content-card [item]="item" />
+            }
+          </div>
+        </section>
+
+        <!-- Series -->
+        <section class="section" aria-label="Series tendencia">
+          <h2 class="section__title">Series tendencia</h2>
+          <div class="grid" role="region" aria-label="Grid de series trending">
+            @for (item of trending.series; track item.id) {
+              <app-content-card [item]="item" />
+            }
+          </div>
+        </section>
+
+        <!-- Juegos -->
+<section class="section" aria-label="Juegos populares">
+  <h2 class="section__title">Juegos populares</h2>
+  <div class="grid grid--games" role="region" aria-label="Grid de juegos populares">
+    @for (item of trending.games; track item.id) {
+      <app-content-card [item]="item" />
+    }
+  </div>
+</section>
+
+      }
+
+    </div>
+  </section>
+
+</div>

@@ -1,0 +1,108 @@
+<div class="search">
+  <div class="container">
+
+    <!-- Barra de búsqueda -->
+    <div class="search__header">
+      <div class="search__input-wrap">
+        <input
+          class="search__input"
+          type="text"
+          placeholder="Buscar películas, series, juegos..."
+          [(ngModel)]="query"
+          (keyup.enter)="onSearch()"
+          (input)="onInputChange()"
+          (blur)="hideSuggestions()"
+          autofocus
+        />
+
+        @if (showSuggestions) {
+          <div class="search__suggestions">
+            @for (item of suggestions; track item.id) {
+              <div class="search__suggestion" (mousedown)="selectSuggestion(item)">
+                @if (item.poster_url) {
+                  <img [src]="item.poster_url" [alt]="item.title" />
+                } @else {
+                  <div class="search__suggestion-placeholder">{{ item.title[0] }}</div>
+                }
+                <div class="search__suggestion-info">
+                  <span class="search__suggestion-title">{{ item.title }}</span>
+                  <span class="badge {{ item.type }}">{{ getTypeLabel(item.type) }}</span>
+                </div>
+                @if (item.rating) {
+                  <span class="search__suggestion-rating">⭐ {{ item.rating }}</span>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+      <button class="btn-primary" (click)="onSearch()">Buscar</button>
+    </div>
+
+    <!-- Filtros -->
+    <div class="search__filters">
+      <button class="search__filter" [class.active]="activeFilter === 'all'" (click)="setFilter('all')">Todo</button>
+      <button class="search__filter" [class.active]="activeFilter === 'movie'" (click)="setFilter('movie')">🎬 Películas</button>
+      <button class="search__filter" [class.active]="activeFilter === 'series'" (click)="setFilter('series')">📺 Series</button>
+      <button class="search__filter" [class.active]="activeFilter === 'game'" (click)="setFilter('game')">🎮 Juegos</button>
+    </div>
+
+    @if (loading) {
+      <div class="search__loading">Buscando...</div>
+    }
+
+    @if (!loading && searched && totalResults === 0) {
+      <div class="search__empty">
+        <p>No se encontraron resultados para <strong>"{{ query }}"</strong></p>
+      </div>
+    }
+
+    @if (!loading && results) {
+      @if (activeFilter === 'all' || activeFilter === 'movie') {
+        @if (results.movies.length) {
+          <section class="section">
+            <h2 class="section__title">🎬 Películas</h2>
+            <div class="grid">
+              @for (item of results.movies; track item.id) {
+                <app-content-card [item]="item" />
+              }
+            </div>
+          </section>
+        }
+      }
+
+      @if (activeFilter === 'all' || activeFilter === 'series') {
+        @if (results.series.length) {
+          <section class="section">
+            <h2 class="section__title">📺 Series</h2>
+            <div class="grid">
+              @for (item of results.series; track item.id) {
+                <app-content-card [item]="item" />
+              }
+            </div>
+          </section>
+        }
+      }
+
+      @if (activeFilter === 'all' || activeFilter === 'game') {
+        @if (results.games.length) {
+          <section class="section">
+            <h2 class="section__title">🎮 Juegos</h2>
+            <div class="grid grid--games">
+              @for (item of results.games; track item.id) {
+                <app-content-card [item]="item" />
+              }
+            </div>
+          </section>
+        }
+      }
+    }
+
+    @if (!searched && !loading) {
+      <div class="search__placeholder">
+        <p>Busca tu película, serie o juego favorito</p>
+      </div>
+    }
+
+  </div>
+</div>

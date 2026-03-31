@@ -1,0 +1,90 @@
+<nav class="navbar">
+  <div class="container navbar__inner">
+
+    <a routerLink="/" class="navbar__logo">
+      <img src="img/logo2.webp" alt="Trackr Logo" class="navbar__logo-image">
+    </a>
+
+    <div class="navbar__search">
+      <div class="navbar__search-wrap">
+        <input
+          type="text"
+          placeholder="Buscar películas, series, juegos..."
+          [(ngModel)]="searchQuery"
+          (keyup.enter)="onSearch()"
+          (input)="onNavInputChange()"
+          (blur)="hideSuggestions()"
+          aria-label="Buscar contenido"
+        />
+
+        @if (showSuggestions) {
+          <div class="navbar__suggestions">
+            @for (item of suggestions; track item.id) {
+              <div class="navbar__suggestion" (mousedown)="selectSuggestion(item)">
+                @if (item.poster_url) {
+                  <img class="navbar__suggestion-img" [src]="item.poster_url" [alt]="item.title" />
+                } @else {
+                  <div class="navbar__suggestion-placeholder">{{ item.title[0] }}</div>
+                }
+                <span class="navbar__suggestion-title">{{ item.title }}</span>
+              </div>
+            }
+          </div>
+        }
+      </div>
+      <button (click)="onSearch()" aria-label="Enviar búsqueda">🔍</button>
+    </div>
+
+    <div class="navbar__actions">
+      @if (isLoggedIn) {
+        <a routerLink="/library" class="navbar__link">Mi biblioteca</a>
+        <span class="navbar__user">{{ username }}</span>
+        <button class="btn-secondary" (click)="requestLogout()">Salir</button>
+      } @else {
+        <button class="btn-secondary" (click)="openLoginModal()">Iniciar sesión</button>
+        <button class="btn-primary" (click)="openRegisterModal()">Registrarse</button>
+      }
+    </div>
+
+    <button
+      class="navbar__hamburger"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="menuOpen"
+      [attr.aria-label]="menuOpen ? 'Cerrar menú' : 'Abrir menú'"
+    ></button>
+  </div>
+
+  <div class="navbar__mobile" [class.open]="menuOpen">
+    <a routerLink="/search" (click)="closeMenu()">Buscar</a>
+    @if (isLoggedIn) {
+      <a routerLink="/library" (click)="closeMenu()">Mi biblioteca</a>
+      <button (click)="requestLogout()">Salir</button>
+    } @else {
+      <a routerLink="/login" (click)="closeMenu()">Iniciar sesión</a>
+      <a routerLink="/register" (click)="closeMenu()">Registrarse</a>
+    }
+  </div>
+</nav>
+
+@if (showLogin) {
+  <app-login
+    (closed)="showLogin = false"
+    (switchToRegister)="showLogin = false; showRegister = true"
+  />
+}
+
+@if (showRegister) {
+  <app-register
+    (closed)="showRegister = false"
+    (switchToLogin)="showRegister = false; showLogin = true"
+  />
+}
+
+<app-alert
+  [visible]="showLogoutConfirm"
+  [confirm]="true"
+  message="¿Seguro que quieres cerrar sesión?"
+  confirmLabel="Cerrar sesión"
+  (confirmed)="confirmLogout()"
+  (cancelled)="cancelLogout()"
+/>

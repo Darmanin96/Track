@@ -1,0 +1,313 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(20, 20, 20, 0.98);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  transition: all var(--duration-normal) var(--easing);
+
+  &:hover {
+    background: rgba(20, 20, 20, 1);
+    box-shadow: var(--shadow-md);
+  }
+
+  &__inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    padding: 0 24px;
+  }
+
+  &__logo {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    transition: transform var(--duration-fast) var(--easing);
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    &-image {
+      height: 32px;
+      width: auto;
+    }
+  }
+
+  &__search {
+    position: absolute;
+    left: 40%;
+    transform: translateX(-50%);
+    flex: 0 1 500px;
+    width: min(500px, calc(100% - 700px));
+    max-width: 500px;
+    display: flex;
+    align-items: center;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    /* overflow: hidden eliminado para que el dropdown no quede cortado */
+    transition: all var(--duration-normal) var(--easing);
+
+    &:focus-within {
+      border-color: var(--primary);
+      box-shadow: inset 0 0 0 1px var(--primary), 0 0 8px rgba(229, 9, 20, 0.2);
+    }
+
+    input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 10px 16px;
+      color: var(--text-primary);
+      font-size: 14px;
+
+      &::placeholder {
+        color: var(--text-muted);
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    button {
+      background: transparent;
+      padding: 10px 16px;
+      color: var(--text-secondary);
+      font-size: 16px;
+      transition: color var(--duration-fast) var(--easing);
+
+      &:hover {
+        color: var(--primary);
+      }
+    }
+
+    /* Wrap relativo para anclar el dropdown */
+    &-wrap {
+      position: relative;
+      flex: 1;
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  /* Dropdown de sugerencias */
+  &__suggestions {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: -2px;
+    right: -2px;
+    background: #1a1a1a;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    z-index: 200;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  }
+
+  &__actions {
+  flex: 0 0 auto;
+  min-width: 280px;     
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+  &__suggestion {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    cursor: pointer;
+    transition: background var(--duration-fast) var(--easing);
+
+    &:not(:last-child) {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    &:hover {
+      background: var(--surface);
+    }
+
+    &-img {
+      width: 32px;
+      height: 44px;
+      object-fit: cover;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    &-placeholder {
+      width: 32px;
+      height: 44px;
+      background: var(--primary);
+      border-radius: 4px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    &-title {
+      color: var(--text-primary);
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  &__actions {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  &__link {
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    transition: color var(--duration-fast) var(--easing);
+    position: relative;
+
+    &:hover {
+      color: var(--primary);
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: width var(--duration-normal) var(--easing);
+    }
+
+    &:hover::after,
+    &.active::after {
+      width: 100%;
+    }
+  }
+
+  &__user {
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    transition: color var(--duration-fast) var(--easing);
+
+    &:hover {
+      color: var(--text-primary);
+    }
+  }
+
+  &__hamburger {
+    display: none;
+    background: transparent;
+    color: var(--text-primary);
+    font-size: 24px;
+    margin-left: auto;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius);
+    transition: all var(--duration-fast) var(--easing);
+    position: relative;
+
+    &:hover {
+      background: var(--surface);
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      width: 24px;
+      height: 2px;
+      background: currentColor;
+      top: 8px;
+      left: 8px;
+      transition: all var(--duration-normal) var(--easing);
+      box-shadow: 0 8px 0 currentColor, 0 16px 0 currentColor;
+    }
+
+    &[aria-expanded="true"]::before {
+      top: 19px;
+      transform: rotate(45deg);
+      box-shadow: 0 0 0 currentColor;
+    }
+
+    &[aria-expanded="true"]::after {
+      content: '';
+      position: absolute;
+      width: 24px;
+      height: 2px;
+      background: currentColor;
+      top: 19px;
+      left: 8px;
+      transform: rotate(-45deg);
+    }
+  }
+
+  &__mobile {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    border-top: 1px solid var(--border);
+    gap: 0;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height var(--duration-slow) var(--easing);
+
+    &.open {
+      max-height: 500px;
+      padding: 16px;
+      gap: 16px;
+    }
+
+    a, button {
+      color: var(--text-primary);
+      font-size: 16px;
+      background: transparent;
+      text-align: left;
+      padding: 14px 16px;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      transition: all var(--duration-fast) var(--easing);
+
+      &:hover {
+        background: var(--surface);
+        border-color: var(--primary);
+        padding-left: 20px;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    &__search {
+      display: none;
+    }
+
+    &__actions {
+      display: none;
+    }
+
+    &__hamburger {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}

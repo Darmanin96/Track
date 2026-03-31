@@ -1,0 +1,144 @@
+<div class="overlay" (click)="onOverlayClick($event)">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="register-title">
+
+    <button class="close-btn" (click)="close()" aria-label="Cerrar">&#x2715;</button>
+
+    <div class="modal-header">
+      <div class="logo-mark">
+      <img src="img/resgistrarse.png" alt="Logo Trackr" class="logo-mark">
+      </div>
+      <h2 id="register-title">Crear cuenta</h2>
+      <p class="subtitle">Únete a <span class="brand">Trackr</span> y empieza a registrar</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" novalidate>
+
+      <div class="field" [class.error]="usernameError">
+        <label for="username">Nombre de usuario</label>
+        <div class="input-wrap">
+          <span class="icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </span>
+          <input
+            id="username"
+            type="text"
+            name="username"
+            [(ngModel)]="username"
+            placeholder="trackr_user"
+            autocomplete="username"
+            (blur)="validateUsername()"
+          />
+        </div>
+        <span class="error-msg" *ngIf="usernameError">{{ usernameError }}</span>
+      </div>
+
+      <div class="field" [class.error]="emailError">
+        <label for="email">Correo electrónico</label>
+        <div class="input-wrap">
+          <span class="icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </span>
+          <input
+            id="email"
+            type="email"
+            name="email"
+            [(ngModel)]="email"
+            placeholder="tu@email.com"
+            autocomplete="email"
+            (blur)="validateEmail()"
+          />
+        </div>
+        <span class="error-msg" *ngIf="emailError">{{ emailError }}</span>
+      </div>
+
+      <div class="field" [class.error]="passwordError">
+        <label for="password">Contraseña</label>
+        <div class="input-wrap">
+          <span class="icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </span>
+          <input
+            id="password"
+            [type]="showPassword ? 'text' : 'password'"
+            name="password"
+            [(ngModel)]="password"
+            placeholder="••••••••"
+            autocomplete="new-password"
+            (blur)="validatePassword()"
+            (input)="updateStrength()"
+          />
+          <button type="button" class="toggle-pw" (click)="showPassword = !showPassword" aria-label="Mostrar/ocultar contraseña">
+            <svg *ngIf="!showPassword" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+            <svg *ngIf="showPassword" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+              <line x1="1" y1="1" x2="23" y2="23"/>
+            </svg>
+          </button>
+        </div>
+        <!-- Strength bar -->
+        <div class="strength-bar" *ngIf="password.length > 0">
+          <div class="bar" [class]="strengthClass"></div>
+        </div>
+        <span class="strength-label" *ngIf="password.length > 0" [class]="strengthClass">{{ strengthLabel }}</span>
+        <span class="error-msg" *ngIf="passwordError">{{ passwordError }}</span>
+      </div>
+
+      <div class="field" [class.error]="confirmError">
+        <label for="confirm">Confirmar contraseña</label>
+        <div class="input-wrap">
+          <span class="icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </span>
+          <input
+            id="confirm"
+            [type]="showPassword ? 'text' : 'password'"
+            name="confirm"
+            [(ngModel)]="confirm"
+            placeholder="••••••••"
+            autocomplete="new-password"
+            (blur)="validateConfirm()"
+          />
+        </div>
+        <span class="error-msg" *ngIf="confirmError">{{ confirmError }}</span>
+      </div>
+
+
+      @if (alertMessage) {
+  <div class="alert" [class.alert--error]="alertType === 'error'" [class.alert--success]="alertType === 'success'">
+    <span class="alert__icon">{{ alertType === 'error' ? '✕' : '✓' }}</span>
+    <span>{{ alertMessage }}</span>
+  </div>
+}
+
+      <button type="submit" class="submit-btn" [class.loading]="isLoading" [disabled]="isLoading">
+        <span *ngIf="!isLoading">Crear cuenta</span>
+        <span *ngIf="isLoading" class="spinner"></span>
+      </button>
+
+      <p class="switch-form">
+        ¿Ya tienes cuenta?
+        <a (click)="goToLogin()" href="#">Inicia sesión</a>
+      </p>
+
+    </form>
+  </div>
+<app-alert
+  [visible]="alertVisible"
+  [message]="alertMessage"
+  [type]="alertType"
+  (closed)="onAlertClosed()"
+/>
+</div>

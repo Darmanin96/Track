@@ -1,0 +1,134 @@
+<div class="detail">
+  @if (loading) {
+    <div class="detail__loading">Cargando...</div>
+
+<app-alert
+  [visible]="alertVisible"
+  [message]="alertMessage"
+  [type]="alertType"
+  (closed)="alertVisible = false"
+/>
+
+<app-alert
+  [visible]="alertVisible"
+  [message]="alertMessage"
+  [type]="alertType"
+  (closed)="alertVisible = false"
+/>
+  }
+
+  @if (!loading && item) {
+    <!-- Backdrop -->
+    @if (item.backdrop_url) {
+      <div class="detail__backdrop">
+        <img [src]="item.backdrop_url" [alt]="item.title" />
+        <div class="detail__backdrop-overlay"></div>
+      </div>
+    }
+
+    <div class="container">
+      <div class="detail__content">
+
+        <!-- Poster -->
+        <div class="detail__poster">
+          @if (item.poster_url) {
+            <img [src]="item.poster_url" [alt]="item.title" />
+          } @else {
+            <div class="detail__no-poster">
+              <span>{{ item.title[0] }}</span>
+            </div>
+          }
+        </div>
+
+        <!-- Info -->
+        <div class="detail__info">
+          <span class="badge {{ item.type }}">{{ getTypeLabel() }}</span>
+          <h1 class="detail__title">{{ item.title }}</h1>
+
+          <div class="detail__meta">
+            @if (item.rating) {
+              <span class="detail__rating">⭐ {{ item.rating }}/10</span>
+            }
+            @if (item.release_date) {
+              <span class="detail__year">{{ getYear() }}</span>
+            }
+          </div>
+
+          @if (item.overview) {
+            <p class="detail__overview">{{ item.overview }}</p>
+          }
+
+          <!-- Acciones -->
+          <div class="detail__actions">
+            <select class="detail__status" [(ngModel)]="selectedStatus" (ngModelChange)="onStatusChange()">
+              <option value="">Añadir a biblioteca</option>
+              @if (item.type === 'movie') {
+                <option value="pending">Pendiente</option>
+                <option value="watching">Viendo</option>
+                <option value="completed">Completado</option>
+                <option value="abandoned">Abandonado</option>
+              }
+              @if (item.type === 'series') {
+                <option value="pending">Pendiente</option>
+                <option value="watching">Viendo</option>
+                <option value="completed">Completado</option>
+                <option value="abandoned">Abandonado</option>
+              }
+              @if (item.type === 'game') {
+                <option value="pending">Pendiente</option>
+                <option value="playing">Jugando</option>
+                <option value="played">Completado</option>
+                <option value="abandoned">Abandonado</option>
+              }
+            </select>
+
+            <button
+              class="btn-primary"
+              [disabled]="!selectedStatus || saving"
+              (click)="addToLibrary()">
+              {{ saving ? 'Guardando...' : 'Guardar' }}
+            </button>
+          </div>
+
+          <!-- Rating: aparece solo si el status es "completado" -->
+          @if (isCompleted) {
+            <div class="detail__rating-picker">
+              <p class="detail__rating-label">Tu puntuación</p>
+              <div class="detail__stars">
+                @for (star of stars; track star) {
+                  <button
+                    class="detail__star"
+                    [class.active]="star <= userRating"
+                    [class.hover]="star <= hoverRating"
+                    (mouseenter)="hoverRating = star"
+                    (mouseleave)="hoverRating = 0"
+                    (click)="setRating(star)"
+                    [attr.aria-label]="star + ' de 10'"
+                  >★</button>
+                }
+              </div>
+              <span class="detail__rating-value">
+                {{ userRating > 0 ? userRating + ' / 10' : 'Sin puntuación' }}
+              </span>
+            </div>
+          }
+
+        </div>
+
+      </div>
+    </div>
+  }
+
+  @if (!loading && !item) {
+    <div class="container">
+      <p class="detail__error">No se encontró el contenido.</p>
+    </div>
+  }
+</div>
+
+<app-alert
+  [visible]="alertVisible"
+  [message]="alertMessage"
+  [type]="alertType"
+  (closed)="alertVisible = false"
+/>

@@ -1,0 +1,17 @@
+<app-navbar />
+
+<main>
+  <router-outlet />
+</main>
+
+@if (showLogin$ | async) {
+  <app-login
+    (closed)="hideLogin()"
+    (switchToRegister)="showRegisterFromLogin()" />
+}
+
+@if (showRegister$ | async) {
+  <app-register
+    (closed)="hideRegister()"
+    (switchToLogin)="showLoginFromRegister()" />
+}
