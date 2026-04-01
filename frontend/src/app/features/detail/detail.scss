@@ -65,6 +65,65 @@
     }
   }
 
+  &__providers {
+  margin-top: 24px;
+
+  &-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 13px;
+  }
+
+  &-list {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+}
+
+&__provider {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+&__platforms {
+  margin-top: 24px;
+}
+
+&__platforms-list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+&__platform-badge {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
   &__no-poster {
     width: 100%;
     height: 100%;

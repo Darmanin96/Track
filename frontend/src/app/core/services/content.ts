@@ -14,6 +14,7 @@ export interface ContentItem {
   release_date: string
   genres: any[]
   rating: number | null
+  platforms?: string[]  // ← añadido, opcional para que no rompa movies/series
 }
 
 export interface SearchResults {
@@ -60,5 +61,13 @@ export class ContentService {
 
   getGameDetail(id: string): Observable<ContentItem> {
     return this.http.get<ContentItem>(`${this.apiUrl}/game/${id}`)
+  }
+
+  getMovieProviders(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/movie/${id}/providers`)
+  }
+
+  getSeriesProviders(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/series/${id}/providers`)
   }
 }

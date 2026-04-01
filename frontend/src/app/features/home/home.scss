@@ -18,22 +18,26 @@
   }
 
   &__title {
-    font-size: 48px;
+    font-size: clamp(24px, 5vw, 52px);
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1.25;
     margin-bottom: 16px;
     animation: fadeIn var(--duration-slow) var(--easing);
     position: relative;
     z-index: 1;
+    padding: 0 20px;
+    word-break: keep-all;
+    overflow-wrap: break-word;
 
     span {
       color: var(--primary);
       text-shadow: 0 0 10px rgba(229, 9, 20, 0.5);
+      display: block; /* evita que se corte a mitad */
     }
   }
 
   &__subtitle {
-    font-size: 18px;
+    font-size: clamp(13px, 2.5vw, 18px);
     color: var(--text-secondary);
     margin-bottom: 32px;
     max-width: 500px;
@@ -42,46 +46,72 @@
     animation: fadeIn var(--duration-slow) var(--easing) 0.1s both;
     position: relative;
     z-index: 1;
+    padding: 0 20px;
   }
 
   &__actions {
     display: flex;
-    gap: 16px;
+    gap: 12px;
     justify-content: center;
     flex-wrap: wrap;
     position: relative;
     z-index: 1;
+    padding: 0 20px;
 
     button {
       animation: slideUp var(--duration-slow) var(--easing) 0.2s both;
+      flex: 1;
+      max-width: 200px;
+      min-width: 140px;
     }
   }
 
   @media (max-width: 768px) {
-    padding: 48px 0 40px;
+    padding: 48px 0 36px;
 
-    &__title {
-      font-size: 32px;
+    &__actions button {
+      max-width: 100%;
+      width: 100%;
     }
+  }
 
-    &__subtitle {
-      font-size: 16px;
+  @media (max-width: 480px) {
+    padding: 36px 0 28px;
+
+    &__actions {
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+
+      button {
+        width: 100%;
+        max-width: 280px;
+      }
     }
   }
 }
 
 .trending {
-  padding: 40px 0;
+  padding: 32px 0 40px;
+  overflow-x: hidden; /* ← evita scroll horizontal */
+
+  @media (max-width: 768px) {
+    padding: 24px 0 32px;
+  }
 }
 
 .section {
   margin-bottom: 48px;
   animation: fadeIn var(--duration-normal) var(--easing);
 
+  @media (max-width: 768px) {
+    margin-bottom: 36px;
+  }
+
   &__title {
-    font-size: 24px;
+    font-size: clamp(16px, 3vw, 24px);
     font-weight: 700;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     color: var(--text-primary);
     display: flex;
     align-items: center;
@@ -93,6 +123,11 @@
       height: 24px;
       background: var(--primary);
       border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 480px) {
+      margin-bottom: 14px;
     }
   }
 }
@@ -102,21 +137,28 @@
   grid-template-columns: repeat(5, 1fr);
   gap: 16px;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1200px) {
     grid-template-columns: repeat(4, 1fr);
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 600px) {
     grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  @media (max-width: 380px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
   }
 
   > * {
     animation: fadeIn var(--duration-normal) var(--easing) backwards;
+    min-width: 0; /* ← evita que las cards desborden el grid */
 
     @for $i from 1 through 20 {
       &:nth-child(#{$i}) {
@@ -126,21 +168,29 @@
   }
 }
 
+.grid--games {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+}
+
 .loading {
   text-align: center;
   color: var(--text-secondary);
   padding: 60px 0;
   font-size: 16px;
-}
-
-.grid--games {
-  grid-template-columns: repeat(3, 1fr);
-
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
 
   @media (max-width: 480px) {
-    grid-template-columns: repeat(1, 1fr);
+    padding: 40px 0;
+    font-size: 14px;
   }
 }

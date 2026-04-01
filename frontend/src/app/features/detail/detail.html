@@ -58,6 +58,22 @@
             <p class="detail__overview">{{ item.overview }}</p>
           }
 
+          @if (providers?.flatrate?.length) {
+  <div class="detail__providers">
+    <h3 class="detail__providers-title">Disponible en</h3>
+    <div class="detail__providers-list">
+      @for (p of providers.flatrate; track p.provider_id) {
+        <div class="detail__provider" [title]="p.provider_name">
+          <img
+            [src]="'https://image.tmdb.org/t/p/w45' + p.logo_path"
+            [alt]="p.provider_name"
+          />
+        </div>
+      }
+    </div>
+  </div>
+}
+
           <!-- Acciones -->
           <div class="detail__actions">
             <select class="detail__status" [(ngModel)]="selectedStatus" (ngModelChange)="onStatusChange()">

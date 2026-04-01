@@ -51,4 +51,20 @@ router.get('/game/:id', async (req, res, next) => {
     } catch (err) { next(err) }
 })
 
+// GET /api/content/movie/:id/providers
+router.get('/movie/:id/providers', async (req, res, next) => {
+  try {
+    const result = await contentService.getMovieProviders(req.params.id)
+    res.json(result)
+  } catch (err) { next(err) }
+})
+
+// GET /api/content/series/:id/providers
+router.get('/series/:id/providers', async (req, res, next) => {
+  try {
+    const result = await contentService.getSeriesProviders(req.params.id)
+    res.json(result)
+  } catch (err) { next(err) }
+})
+
 module.exports = router

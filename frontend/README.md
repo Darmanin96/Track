@@ -1,59 +1,142 @@
-# Frontend
+# 🎬 Trackr — Tu tracker de películas, series y videojuegos
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.3.
+Plataforma web PWA para llevar el control de todo lo que ves y juegas. Busca contenido, puntúalo, reseñalo y comparte tus listas con quien quieras.
 
-## Development server
+🔗 **Demo en producción:** [http://45.90.237.204](http://45.90.237.204)
 
-To start a local development server, run:
+---
+
+## ✨ Funcionalidades
+
+- 🔍 **Búsqueda** de películas, series y videojuegos con autocompletado
+- 📚 **Biblioteca personal** — añade contenido con estado (viendo, completado, pendiente...)
+- ⭐ **Puntuaciones y reseñas** del 1 al 10
+- 👤 **Registro e inicio de sesión** con JWT
+- 📱 **PWA** — instalable como app nativa en móvil y escritorio
+- 🌍 **Responsive** — adaptado a móvil, tablet y escritorio
+
+---
+
+## 🏗️ Arquitectura
+
+```
+[Angular PWA] → [API Node.js en CubePath] → [TMDB API / RAWG API]
+                          ↓
+                    [PostgreSQL]
+```
+
+---
+
+## 🚀 Stack tecnológico
+
+| Capa | Tecnología |
+|---|---|
+| Frontend | Angular 17 + PWA |
+| Backend | Node.js + Express |
+| Base de datos | PostgreSQL |
+| Películas y series | TMDB API |
+| Videojuegos | RAWG API |
+| Auth | JWT |
+| Despliegue | CubePath (Nginx + PM2) |
+
+---
+
+## 📦 Instalación local
+
+### Prerrequisitos
+- Node.js 20+
+- Angular CLI (`npm install -g @angular/cli`)
+- PostgreSQL (o Docker)
+
+### Backend
 
 ```bash
+cd backend
+cp .env.example .env
+# Edita .env con tus credenciales
+npm install
+npm run dev
+```
+
+### Frontend
+
+```bash
+cd frontend
+npm install
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Abre el navegador en `http://localhost:4200`.
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## 🔧 Variables de entorno
 
-```bash
-ng generate component component-name
+Crea un archivo `.env` en la carpeta `backend/` con:
+
+```env
+PORT=3000
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=trackr
+DB_USER=postgres
+DB_PASSWORD=tu_password
+JWT_SECRET=secreto_muy_largo
+JWT_EXPIRES_IN=7d
+TMDB_API_KEY=tu_key_de_tmdb
+TMDB_BASE_URL=https://api.themoviedb.org/3
+RAWG_API_KEY=tu_key_de_rawg
+RAWG_BASE_URL=https://api.rawg.io/api
+FRONTEND_URL=http://localhost:4200
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
+## ☁️ Despliegue en CubePath
+
+### Backend
 ```bash
-ng generate --help
+pm2 start src/server.js --name trackr-api
+pm2 save
+pm2 startup
 ```
 
-## Building
-
-To build the project run:
-
+### Frontend
 ```bash
-ng build
+ng build --configuration production
+scp -r dist/frontend/browser/* root@tu-ip:/var/www/Track/frontend/
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
+## 📡 Endpoints principales
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+| Método | Ruta | Descripción |
+|---|---|---|
+| POST | `/api/auth/register` | Registro de usuario |
+| POST | `/api/auth/login` | Inicio de sesión |
+| GET | `/api/content/trending` | Tendencias |
+| GET | `/api/content/search?q=...` | Búsqueda |
+| GET | `/api/library` | Mi biblioteca |
+| POST | `/api/library` | Añadir a biblioteca |
+| GET | `/api/lists` | Mis listas |
+| POST | `/api/lists` | Crear lista |
 
-```bash
-ng test
-```
+---
 
-## Running end-to-end tests
+## 🖼️ Capturas
 
-For end-to-end (e2e) testing, run:
 
-```bash
-ng e2e
-```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
+## ☁️ Cómo se usa CubePath
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Este proyecto usa **CubePath** para:
+- Hospedar el **backend** Node.js con PM2
+- Hospedar el **frontend** Angular compilado como sitio estático con Nginx
+- Gestionar la **base de datos** PostgreSQL en producción
+
+---
+
+Desarrollado para la **Hackatón CubePath 2026** organizada por [@midudev](https://midu.dev).

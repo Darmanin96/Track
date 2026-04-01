@@ -10,7 +10,14 @@
 >
   <div class="card__poster" [class.card__poster--game]="item.type === 'game'">
     @if (item.poster_url) {
-      <img [src]="item.poster_url" [alt]="'Imagen de ' + item.title" loading="lazy" />
+      <img
+        [src]="item.poster_url"
+        [alt]="'Imagen de ' + item.title"
+        [loading]="isFirst ? 'eager' : 'lazy'"
+        [attr.fetchpriority]="isFirst ? 'high' : null"
+        width="231"
+        height="347"
+      />
     } @else {
       <div class="card__no-poster" aria-hidden="false">
         <span aria-hidden="true">{{ item.title[0] }}</span>

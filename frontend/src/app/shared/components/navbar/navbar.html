@@ -2,7 +2,7 @@
   <div class="container navbar__inner">
 
     <a routerLink="/" class="navbar__logo">
-      <img src="img/logo2.webp" alt="Trackr Logo" class="navbar__logo-image">
+      <img src="img/logo2.webp" alt="Trackr Logo" class="navbar__logo-image" width="32" height="32">
     </a>
 
     <div class="navbar__search">
@@ -22,7 +22,7 @@
             @for (item of suggestions; track item.id) {
               <div class="navbar__suggestion" (mousedown)="selectSuggestion(item)">
                 @if (item.poster_url) {
-                  <img class="navbar__suggestion-img" [src]="item.poster_url" [alt]="item.title" />
+                  <img class="navbar__suggestion-img" [src]="item.poster_url" [alt]="item.title" width="32" height="44" />
                 } @else {
                   <div class="navbar__suggestion-placeholder">{{ item.title[0] }}</div>
                 }
@@ -60,8 +60,8 @@
       <a routerLink="/library" (click)="closeMenu()">Mi biblioteca</a>
       <button (click)="requestLogout()">Salir</button>
     } @else {
-      <a routerLink="/login" (click)="closeMenu()">Iniciar sesión</a>
-      <a routerLink="/register" (click)="closeMenu()">Registrarse</a>
+      <button (click)="openLoginModal(); closeMenu()">Iniciar sesión</button>
+      <button (click)="openRegisterModal(); closeMenu()">Registrarse</button>
     }
   </div>
 </nav>

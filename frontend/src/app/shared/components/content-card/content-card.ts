@@ -10,6 +10,7 @@ import { ContentItem } from '../../../core/services/content'
 })
 export class ContentCard {
   @Input() item!: ContentItem
+  @Input() isFirst = false
 
   constructor(private router: Router) {}
 

@@ -32,10 +32,9 @@
     overflow: hidden;
     background: var(--surface-2);
 
-     &--game {
-    aspect-ratio: 16/9;
-  }
-
+    &--game {
+      aspect-ratio: 16/9;
+    }
 
     img {
       width: 100%;
@@ -43,6 +42,7 @@
       object-fit: cover;
       transition: transform var(--duration-slow) var(--easing);
       animation: fadeIn var(--duration-normal) var(--easing);
+      /* Recomendado en HTML: <img loading="lazy" /> */
     }
 
     &:hover img {
@@ -146,5 +146,14 @@
     font-size: 12px;
     color: var(--text-muted);
     margin-top: auto;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .card {
+    &:nth-child(n + 6) { 
+      display: none !important;
+    }
   }
 }

@@ -134,8 +134,31 @@ const formatGame = (g) => ({
   backdrop_url: g.background_image || null,
   release_date: g.released,
   genres: g.genres?.map(g => g.name) || [],
-  rating: g.rating ? parseFloat(g.rating.toFixed(1)) : null
+  rating: g.rating ? parseFloat(g.rating.toFixed(1)) : null,
+  platforms: g.platforms?.map(p => p.platform.name) || []
 })
+
+const getMovieProviders = async (tmdbId) => {
+  const { data } = await tmdbClient.get(`/movie/${tmdbId}/watch/providers`)
+  const es = data.results?.ES || data.results?.US || {}
+  return {
+    flatrate: es.flatrate || [],
+    rent: es.rent || [],         
+    buy: es.buy || []   
+  }
+}
+
+const getSeriesProviders = async (tmdbId) => {
+  const { data } = await tmdbClient.get(`/tv/${tmdbId}/watch/providers`)
+  const es = data.results?.ES || data.results?.US || {}
+  return {
+    flatrate: es.flatrate || [],
+    rent: es.rent || [],
+    buy: es.buy || []
+  }
+}
+
+
 
 module.exports = {
   searchAll,
@@ -145,5 +168,12 @@ module.exports = {
   getMovieDetail,
   getSeriesDetail,
   getGameDetail,
+  getTrending
+}
+
+module.exports = {
+  searchAll, searchMovies, searchSeries, searchGames,
+  getMovieDetail, getSeriesDetail, getGameDetail,
+  getMovieProviders, getSeriesProviders,
   getTrending
 }

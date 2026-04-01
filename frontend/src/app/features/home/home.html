@@ -26,8 +26,8 @@
         <section class="section" aria-label="Películas tendencia">
           <h2 class="section__title">Películas tendencia</h2>
           <div class="grid" role="region" aria-label="Grid de películas trending">
-            @for (item of trending.movies; track item.id) {
-              <app-content-card [item]="item" />
+            @for (item of trending.movies; track item.id; let first = $first) {
+              <app-content-card [item]="item" [isFirst]="first" />
             }
           </div>
         </section>
@@ -43,14 +43,14 @@
         </section>
 
         <!-- Juegos -->
-<section class="section" aria-label="Juegos populares">
-  <h2 class="section__title">Juegos populares</h2>
-  <div class="grid grid--games" role="region" aria-label="Grid de juegos populares">
-    @for (item of trending.games; track item.id) {
-      <app-content-card [item]="item" />
-    }
-  </div>
-</section>
+        <section class="section" aria-label="Juegos populares">
+          <h2 class="section__title">Juegos populares</h2>
+          <div class="grid grid--games" role="region" aria-label="Grid de juegos populares">
+            @for (item of trending.games; track item.id) {
+              <app-content-card [item]="item" />
+            }
+          </div>
+        </section>
 
       }
 

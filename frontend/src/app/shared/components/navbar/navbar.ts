@@ -5,7 +5,6 @@ import { AuthService } from '../../../core/services/auth'
 import { LoginComponent } from '../../../features/auth/login/login'
 import { RegisterComponent } from '../../../features/auth/register/register'
 import { AlertComponent } from '../../../shared/components/alert/alert.component'
-import { ModalService } from '../../../core/services/modal'
 import { ContentService } from '../../../core/services/content'
 
 @Component({
@@ -34,7 +33,6 @@ export class Navbar implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private modalService: ModalService,
     private contentService: ContentService
   ) {}
 
@@ -82,11 +80,13 @@ export class Navbar implements OnInit {
   }
 
   openLoginModal(): void {
-    this.modalService.showLogin()
-  }
+  this.showLogin = true
+  this.closeMenu()
+}
 
   openRegisterModal(): void {
-    this.modalService.showRegister()
+    this.showRegister = true
+    this.closeMenu()
   }
 
   onNavInputChange(): void {

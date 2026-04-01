@@ -51,6 +51,8 @@ export class Detail implements OnInit {
     })
   }
 
+providers: any = null
+  
   loadContent(type: string, id: string): void {
     this.loading = true
     this.item = null
@@ -65,15 +67,26 @@ export class Detail implements OnInit {
       request$ = this.contentService.getGameDetail(id)
     }
 
-    request$.subscribe({
-      next: data => {
-        this.item = data
-        this.loading = false
-      },
-      error: () => {
-        this.loading = false
+    
+  request$.subscribe({
+    next: data => {
+      this.item = data
+      this.loading = false
+      // Cargar proveedores para películas y series
+      if (type === 'movie') {
+        this.contentService.getMovieProviders(id).subscribe({
+          next: p => this.providers = p,
+          error: () => {}
+        })
+      } else if (type === 'series') {
+        this.contentService.getSeriesProviders(id).subscribe({
+          next: p => this.providers = p,
+          error: () => {}
+        })
       }
-    })
+    },
+    error: () => { this.loading = false }
+  })
   }
 
   onStatusChange(): void {
