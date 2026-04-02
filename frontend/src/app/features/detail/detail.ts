@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { FormsModule } from '@angular/forms'
 import { CommonModule } from '@angular/common'
@@ -6,6 +6,7 @@ import { ContentService, ContentItem } from '../../core/services/content'
 import { LibraryService } from '../../core/services/library'
 import { AuthService } from '../../core/services/auth'
 import { AlertComponent } from '../../shared/components/alert/alert.component'
+
 
 @Component({
   selector: 'app-detail',
@@ -38,7 +39,8 @@ export class Detail implements OnInit {
     private route: ActivatedRoute,
     private contentService: ContentService,
     private libraryService: LibraryService,
-    private authService: AuthService
+    private authService: AuthService,
+     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -56,6 +58,7 @@ providers: any = null
   loadContent(type: string, id: string): void {
     this.loading = true
     this.item = null
+    this.providers = null
 
     let request$
 
@@ -68,6 +71,7 @@ providers: any = null
     }
 
     
+    
   request$.subscribe({
     next: data => {
       this.item = data
@@ -75,12 +79,19 @@ providers: any = null
       // Cargar proveedores para películas y series
       if (type === 'movie') {
         this.contentService.getMovieProviders(id).subscribe({
-          next: p => this.providers = p,
+          next: p => {
+            console.log('Proveedores de película:', p)
+            this.providers = p
+            this.cdr.detectChanges()  // ← añade
+          },
           error: () => {}
         })
       } else if (type === 'series') {
         this.contentService.getSeriesProviders(id).subscribe({
-          next: p => this.providers = p,
+          next: p => {
+            this.providers = p
+            this.cdr.detectChanges()  // ← añade
+          },
           error: () => {}
         })
       }

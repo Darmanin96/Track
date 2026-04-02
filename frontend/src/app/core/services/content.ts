@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { Observable } from 'rxjs'
 import { environment } from '../../../environments/environment'
+import { map } from 'rxjs/operators'
 
 export interface ContentItem {
   id: string
@@ -63,11 +64,15 @@ export class ContentService {
     return this.http.get<ContentItem>(`${this.apiUrl}/game/${id}`)
   }
 
-  getMovieProviders(id: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/movie/${id}/providers`)
-  }
+ getMovieProviders(id: string): Observable<any> {
+  return this.http.get(`${this.apiUrl}/movie/${id}/providers`).pipe(
+    map((res: any) => res?.['ES'] ?? null)
+  )
+}
 
-  getSeriesProviders(id: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/series/${id}/providers`)
-  }
+getSeriesProviders(id: string): Observable<any> {
+  return this.http.get(`${this.apiUrl}/series/${id}/providers`).pipe(
+    map((res: any) => res?.['ES'] ?? null)
+  )
+}
 }

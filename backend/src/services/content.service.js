@@ -139,17 +139,19 @@ const formatGame = (g) => ({
 })
 
 const getMovieProviders = async (tmdbId) => {
-  const { data } = await tmdbClient.get(`/movie/${tmdbId}/watch/providers`)
+  const cleanId = tmdbId.replace('movie_', '') 
+  const { data } = await tmdbClient.get(`/movie/${cleanId}/watch/providers`)
   const es = data.results?.ES || data.results?.US || {}
   return {
     flatrate: es.flatrate || [],
-    rent: es.rent || [],         
-    buy: es.buy || []   
+    rent: es.rent || [],
+    buy: es.buy || []
   }
 }
 
 const getSeriesProviders = async (tmdbId) => {
-  const { data } = await tmdbClient.get(`/tv/${tmdbId}/watch/providers`)
+  const cleanId = tmdbId.replace('series_', '')
+  const { data } = await tmdbClient.get(`/tv/${cleanId}/watch/providers`)
   const es = data.results?.ES || data.results?.US || {}
   return {
     flatrate: es.flatrate || [],
@@ -159,17 +161,6 @@ const getSeriesProviders = async (tmdbId) => {
 }
 
 
-
-module.exports = {
-  searchAll,
-  searchMovies,
-  searchSeries,
-  searchGames,
-  getMovieDetail,
-  getSeriesDetail,
-  getGameDetail,
-  getTrending
-}
 
 module.exports = {
   searchAll, searchMovies, searchSeries, searchGames,

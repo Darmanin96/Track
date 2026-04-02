@@ -1,24 +1,9 @@
 <div class="detail">
   @if (loading) {
     <div class="detail__loading">Cargando...</div>
-
-<app-alert
-  [visible]="alertVisible"
-  [message]="alertMessage"
-  [type]="alertType"
-  (closed)="alertVisible = false"
-/>
-
-<app-alert
-  [visible]="alertVisible"
-  [message]="alertMessage"
-  [type]="alertType"
-  (closed)="alertVisible = false"
-/>
   }
 
   @if (!loading && item) {
-    <!-- Backdrop -->
     @if (item.backdrop_url) {
       <div class="detail__backdrop">
         <img [src]="item.backdrop_url" [alt]="item.title" />
@@ -29,7 +14,6 @@
     <div class="container">
       <div class="detail__content">
 
-        <!-- Poster -->
         <div class="detail__poster">
           @if (item.poster_url) {
             <img [src]="item.poster_url" [alt]="item.title" />
@@ -40,7 +24,6 @@
           }
         </div>
 
-        <!-- Info -->
         <div class="detail__info">
           <span class="badge {{ item.type }}">{{ getTypeLabel() }}</span>
           <h1 class="detail__title">{{ item.title }}</h1>
@@ -58,21 +41,63 @@
             <p class="detail__overview">{{ item.overview }}</p>
           }
 
-          @if (providers?.flatrate?.length) {
-  <div class="detail__providers">
-    <h3 class="detail__providers-title">Disponible en</h3>
-    <div class="detail__providers-list">
-      @for (p of providers.flatrate; track p.provider_id) {
-        <div class="detail__provider" [title]="p.provider_name">
-          <img
-            [src]="'https://image.tmdb.org/t/p/w45' + p.logo_path"
-            [alt]="p.provider_name"
-          />
-        </div>
-      }
-    </div>
-  </div>
-}
+          <!-- Plataformas de streaming (películas y series) -->
+          @if (providers && (providers.flatrate?.length || providers.rent?.length || providers.buy?.length)) {
+            <div class="detail__providers">
+
+              @if (providers.flatrate?.length) {
+                <div class="detail__providers-group">
+                  <h3 class="detail__providers-title">Incluido en</h3>
+                  <div class="detail__providers-list">
+                    @for (p of providers.flatrate; track p.provider_id) {
+                      <div class="detail__provider" [title]="p.provider_name">
+                        <img [src]="'https://image.tmdb.org/t/p/w45' + p.logo_path" [alt]="p.provider_name" width="40" height="40" />
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+
+              @if (providers.rent?.length) {
+                <div class="detail__providers-group">
+                  <h3 class="detail__providers-title">Alquilar en</h3>
+                  <div class="detail__providers-list">
+                    @for (p of providers.rent; track p.provider_id) {
+                      <div class="detail__provider" [title]="p.provider_name">
+                        <img [src]="'https://image.tmdb.org/t/p/w45' + p.logo_path" [alt]="p.provider_name" width="40" height="40" />
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+
+              @if (providers.buy?.length) {
+                <div class="detail__providers-group">
+                  <h3 class="detail__providers-title">Comprar en</h3>
+                  <div class="detail__providers-list">
+                    @for (p of providers.buy; track p.provider_id) {
+                      <div class="detail__provider" [title]="p.provider_name">
+                        <img [src]="'https://image.tmdb.org/t/p/w45' + p.logo_path" [alt]="p.provider_name" width="40" height="40" />
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+
+            </div>
+          }
+
+          <!-- Plataformas de juegos -->
+          @if (item.type === 'game' && item.platforms?.length) {
+            <div class="detail__platforms">
+              <h3 class="detail__providers-title">Disponible en</h3>
+              <div class="detail__platforms-list">
+                @for (platform of item.platforms; track platform) {
+                  <span class="detail__platform-badge">{{ platform }}</span>
+                }
+              </div>
+            </div>
+          }
 
           <!-- Acciones -->
           <div class="detail__actions">
@@ -106,7 +131,6 @@
             </button>
           </div>
 
-          <!-- Rating: aparece solo si el status es "completado" -->
           @if (isCompleted) {
             <div class="detail__rating-picker">
               <p class="detail__rating-label">Tu puntuación</p>
@@ -130,7 +154,6 @@
           }
 
         </div>
-
       </div>
     </div>
   }
