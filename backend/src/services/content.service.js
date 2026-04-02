@@ -60,7 +60,8 @@ const getGameDetail = async (rawgId) => {
   if (cached.rows.length > 0) return cached.rows[0]
 
   const { data } = await rawgClient.get(`/games/${rawgId}`)
-  const formatted = formatGame(data)
+  const overview = await translateToSpanish(data.description_raw || data.description || '')
+  const formatted = formatGame({ ...data, description_raw: overview })
   await cacheContent(cacheId, 'game', formatted, data)
   return formatted
 }
@@ -157,6 +158,27 @@ const getSeriesProviders = async (tmdbId) => {
     flatrate: es.flatrate || [],
     rent: es.rent || [],
     buy: es.buy || []
+  }
+}
+
+
+const translateToSpanish = async (text) => {
+  if (!text) return text
+  try {
+    const response = await fetch('https://translate.fedilab.app/translate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        q: text,
+        source: 'en',
+        target: 'es',
+        format: 'text'
+      })
+    })
+    const data = await response.json()
+    return data.translatedText || text
+  } catch {
+    return text
   }
 }
 
