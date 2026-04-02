@@ -6,6 +6,7 @@ import { ContentService, ContentItem } from '../../core/services/content'
 import { LibraryService } from '../../core/services/library'
 import { AuthService } from '../../core/services/auth'
 import { AlertComponent } from '../../shared/components/alert/alert.component'
+import { UiService } from '../../core/services/ui.service'
 
 
 @Component({
@@ -40,7 +41,8 @@ export class Detail implements OnInit {
     private contentService: ContentService,
     private libraryService: LibraryService,
     private authService: AuthService,
-     private cdr: ChangeDetectorRef
+     private cdr: ChangeDetectorRef,
+      private uiService: UiService
   ) {}
 
   ngOnInit(): void {
@@ -120,7 +122,7 @@ providers: any = null
 
   addToLibrary(): void {
     if (!this.isLoggedIn) {
-      this.showAlert('Inicia sesión para añadir a tu biblioteca', 'error')
+      this.uiService.openLogin()
       return
     }
     if (!this.selectedStatus || !this.item) return
