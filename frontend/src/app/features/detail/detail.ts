@@ -78,6 +78,7 @@ providers: any = null
       this.loading = false
       // Cargar proveedores para películas y series
       if (type === 'movie') {
+         console.log('Llamando a getMovieProviders con id:', id)
         this.contentService.getMovieProviders(id).subscribe({
           next: p => {
             console.log('Proveedores de película:', p)
