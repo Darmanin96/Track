@@ -82,9 +82,9 @@ providers: any = null
           next: p => {
             console.log('Proveedores de película:', p)
             this.providers = p
-            this.cdr.detectChanges()  // ← añade
+            this.cdr.detectChanges()
           },
-          error: () => {}
+           error: (e) => console.error('Error providers:', e)  
         })
       } else if (type === 'series') {
         this.contentService.getSeriesProviders(id).subscribe({
